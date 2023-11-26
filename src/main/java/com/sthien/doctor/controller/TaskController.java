@@ -68,7 +68,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTaskById(@PathVariable long id) throws Exception{
         try {
             Optional<Task> taskOptional = taskService.getTaskById(id);
