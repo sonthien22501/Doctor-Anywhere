@@ -3,6 +3,7 @@ package com.sthien.doctor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,12 +43,16 @@ public class SpringConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/task/{id}").hasRole("ADMIN")
-                .antMatchers("/task").permitAll()
+                .antMatchers(HttpMethod.GET, "/task").permitAll()
+                .antMatchers("/task/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .permitAll()
+                .and()
+                .logout()
                 .permitAll();
     }
 }
