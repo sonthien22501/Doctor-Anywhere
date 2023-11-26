@@ -31,11 +31,11 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getTaskById(@PathVariable Long id) throws Exception{
         try {
-            Optional<Task> taskOptional = taskService.getTaskById(id);
-            if (!taskOptional.isPresent()) {
-                return new ResponseEntity<>("Can not find the task with id: " + id, HttpStatus.NO_CONTENT);
+            Optional<Task> task = taskService.getTaskById(id);
+            if (!task.isPresent()) {
+                return new ResponseEntity<>("Can not find the task with id: " + id, HttpStatus.NOT_FOUND);
             }
-            return ResponseEntity.ok(taskOptional.get());
+            return ResponseEntity.ok(task.get());
 
         } catch (Exception e) {
             throw new Exception("Can't find the task with id: " + id, e);
@@ -48,10 +48,10 @@ public class TaskController {
             if (taskResponse != null) {
                 return ResponseEntity.ok(taskResponse);
             }
-            return new ResponseEntity("Create Unsuccessful ", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Create Unsuccessfully ", HttpStatus.BAD_REQUEST);
 
         } catch (Exception e) {
-            throw new Exception("Create Unsuccessful");
+            throw new Exception("Create Unsuccessfully");
         }
     }
 
@@ -71,8 +71,12 @@ public class TaskController {
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteTaskById(@PathVariable long id) throws Exception{
         try {
-            taskService.deleteTaskById(id);
-            return ResponseEntity.ok("deleted successfully");
+            Optional<Task> taskOptional = taskService.getTaskById(id);
+            if (taskOptional != null){
+                taskService.deleteTaskById(id);
+                return ResponseEntity.ok("Deleted successfully");
+            }
+            return new ResponseEntity("Delete Unsuccessful ", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             throw new Exception("Fail delete ", e);
         }
