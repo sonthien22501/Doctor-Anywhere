@@ -1,8 +1,9 @@
 #1. CRUD Task API
 
-#2. Using JPA to create entity in local db
+#2. Using JPA to create entity and call api to control data in local db
 
 #3. Spring Secuirty
+
 All user: Can only get all Tasks
 Admin: Can do everything (Get All, Get By ID, Create, Update, Delete)
 
