@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    volumes:
+      - ./setup.sql:/var/lib/mysql/initdb.d/setup.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tasks
+      MYSQL_USER: sthien
+      MYSQL_PASSWORD: 123
+    ports:
+       - "3306:3306"
+
+  application:
+    build: .
+    depends_on:
+       - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/tasks
+      SPRING_DATASOURCE_USERNAME: sthien
+      SPRING_DATASOURCE_PASSWORD: 123
+    ports:
+      - "8080:8080"
